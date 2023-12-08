@@ -35,9 +35,19 @@ func TestBubbleSort(t *testing.T) {
 	}
 }
 
-func TestSelectioSort(t *testing.T) {
+func TestSelectionSort(t *testing.T) {
 	for _, testCase := range addTest {
 		got := SelectionSort(testCase.arg)
+		want := testCase.expected
+		if !cmp.Equal(got, want) {
+			t.Errorf("Got %v, want %v", got, want)
+		}
+	}
+}
+
+func TestInsertionSort(t *testing.T) {
+	for _, testCase := range addTest {
+		got := InsertionSort(testCase.arg)
 		want := testCase.expected
 		if !cmp.Equal(got, want) {
 			t.Errorf("Got %v, want %v", got, want)

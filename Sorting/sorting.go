@@ -1,5 +1,22 @@
 package sorting
 
+func InsertionSort(l []float64) []float64 {
+	n := len(l)
+
+	for i := 1; i < n; i++ {
+		chave := l[i]
+		j := i - 1
+
+		for j >= 0 && l[j] > chave {
+			l[j + 1] = l[j]
+			j--
+		}
+		l[j + 1] = chave
+	}
+
+	return l
+}
+
 func SelectionSort(l []float64) []float64 {
 	n := len(l)
 
