@@ -24,3 +24,13 @@ func TestMergeSort(t *testing.T) {
 		}
 	}
 }
+
+func TestBubbleSort(t *testing.T) {
+	for _, testCase := range addTest {
+		got := BubbleSort(testCase.arg)
+		want := testCase.expected
+		if !cmp.Equal(got, want) {
+			t.Errorf("Got %v, want %v", got, want)
+		}
+	}
+}
