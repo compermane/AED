@@ -1,5 +1,19 @@
 package sorting
 
+func SelectionSort(l []float64) []float64 {
+	n := len(l)
+
+	for i := 0; i < n - 1; i++ {
+		for j := i + 1; j < n; j++ {
+			if l[i] > l[j] && i != j {
+				l[i], l[j] = l[j], l[i]
+			}
+		}
+	}
+
+	return l
+}
+
 func BubbleSort(l []float64) []float64 {
 	n := len(l)
 
