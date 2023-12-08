@@ -7,6 +7,6 @@ import (
 )
 
 func main() {
-	fmt.Println("BRUH")
-	AVL.Node
+	root := AVL.CreateNode(3)
+	fmt.Println(root.Inorder())
 }

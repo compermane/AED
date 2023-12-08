@@ -1,6 +1,7 @@
 package AVL
 
 import (
+	"fmt"
 	"math"
 )
 
@@ -11,59 +12,60 @@ type Node struct {
 	altura   int64
 }
 
-func createNode(v float64) *Node {
+func CreateNode(v float64) *Node {
+	fmt.Println("BRUH")
 	return &Node{nil, nil, v, 0}
 }
 
-func insertValue(v float64, raiz *Node) *Node {
+func InsertValue(v float64, raiz *Node) *Node {
 	if raiz == nil {
-		return createNode(v)
+		return CreateNode(v)
 	}
 
 	if v < raiz.chave {
-		raiz.filhoEsq = insertValue(v, raiz.filhoEsq)
+		raiz.filhoEsq = InsertValue(v, raiz.filhoEsq)
 	} else if v > raiz.chave {
-		raiz.filhoDir = insertValue(v, raiz.filhoDir)
+		raiz.filhoDir = InsertValue(v, raiz.filhoDir)
 	} else {
 		return raiz
 	}
 
 	// Atualizar o fator de balanco para cada noh e balancear a arvore
-	raiz.altura = int64(math.Max(float64(raiz.filhoEsq.getHeight()), float64(raiz.filhoDir.getHeight()))) + 1
+	raiz.altura = int64(math.Max(float64(raiz.filhoEsq.GetHeight()), float64(raiz.filhoDir.GetHeight()))) + 1
 
-	balance := raiz.getBalance()
+	balance := raiz.GetBalance()
 	if balance > 1 && v < raiz.filhoEsq.chave {
-		return rightRotate(raiz)
+		return RightRotate(raiz)
 	}
 	if balance < -1 && v > raiz.filhoDir.chave {
-		return leftRotate(raiz)
+		return LeftRotate(raiz)
 	}
 	if balance > 1 && v > raiz.filhoEsq.chave {
-		raiz.filhoEsq = leftRotate(raiz.filhoEsq)
-		return rightRotate(raiz)
+		raiz.filhoEsq = LeftRotate(raiz.filhoEsq)
+		return RightRotate(raiz)
 	}
 	if balance < -1 && v < raiz.filhoDir.chave {
-		raiz.filhoDir = rightRotate(raiz.filhoDir)
-		return leftRotate(raiz)
+		raiz.filhoDir = RightRotate(raiz.filhoDir)
+		return LeftRotate(raiz)
 	}
 
 	return raiz
 }
 
-func deleteValue(v float64, raiz *Node) *Node {
+func DeleteValue(v float64, raiz *Node) *Node {
 	if raiz == nil {
 		return raiz
 	}
 
 	if v < raiz.chave {
-		raiz.filhoEsq = deleteValue(v, raiz.filhoEsq)
+		raiz.filhoEsq = DeleteValue(v, raiz.filhoEsq)
 	} else if v > raiz.chave {
-		raiz.filhoDir = deleteValue(v, raiz.filhoDir)
+		raiz.filhoDir = DeleteValue(v, raiz.filhoDir)
 	} else {
 		if raiz.filhoEsq != nil && raiz.filhoDir != nil {
-			menorValorDireito := findSmallest(raiz.filhoDir)
+			menorValorDireito := FindSmallest(raiz.filhoDir)
 			raiz.chave = menorValorDireito.chave
-			raiz.filhoDir = deleteValue(menorValorDireito.chave, raiz.filhoDir)
+			raiz.filhoDir = DeleteValue(menorValorDireito.chave, raiz.filhoDir)
 		} else if raiz.filhoEsq != nil {
 			raiz = raiz.filhoEsq
 		} else if raiz.filhoDir != nil {
@@ -75,57 +77,57 @@ func deleteValue(v float64, raiz *Node) *Node {
 
 	}
 
-	return rebalanceTree(raiz)
+	return RebalanceTree(raiz)
 }
 
-func rebalanceTree(raiz *Node) *Node {
+func RebalanceTree(raiz *Node) *Node {
 	if raiz == nil {
 		return raiz
 	}
 
-	raiz.altura = 1 + int64(math.Max(float64(raiz.filhoEsq.getHeight()), float64(raiz.filhoDir.getHeight())))
+	raiz.altura = 1 + int64(math.Max(float64(raiz.filhoEsq.GetHeight()), float64(raiz.filhoDir.GetHeight())))
 
-	fator := raiz.getBalance()
+	fator := raiz.GetBalance()
 
 	if fator == -2 {
-		if raiz.filhoDir.filhoEsq.getHeight() > raiz.filhoDir.filhoDir.getHeight() {
-			raiz.filhoDir = rightRotate(raiz.filhoDir)
+		if raiz.filhoDir.filhoEsq.GetHeight() > raiz.filhoDir.filhoDir.GetHeight() {
+			raiz.filhoDir = RightRotate(raiz.filhoDir)
 		}
 
-		return leftRotate(raiz)
+		return LeftRotate(raiz)
 	} else if fator == 2 {
-		if raiz.filhoEsq.filhoDir.getHeight() > raiz.filhoEsq.filhoEsq.getHeight() {
-			raiz.filhoEsq = leftRotate(raiz.filhoEsq)
+		if raiz.filhoEsq.filhoDir.GetHeight() > raiz.filhoEsq.filhoEsq.GetHeight() {
+			raiz.filhoEsq = LeftRotate(raiz.filhoEsq)
 		}
-		return rightRotate(raiz)
+		return RightRotate(raiz)
 	}
 
 	return raiz
 }
 
-func findSmallest(raiz *Node) *Node {
+func FindSmallest(raiz *Node) *Node {
 	if raiz.filhoEsq != nil {
-		return findSmallest(raiz.filhoEsq)
+		return FindSmallest(raiz.filhoEsq)
 	}
 
 	return raiz
 }
 
-func (raiz *Node) getHeight() int64 {
+func (raiz *Node) GetHeight() int64 {
 	if raiz == nil {
 		return 0
 	}
 	return raiz.altura
 }
 
-func (raiz *Node) getBalance() int64 {
+func (raiz *Node) GetBalance() int64 {
 	if raiz == nil {
 		return 0
 	}
-	return raiz.filhoEsq.getHeight() - raiz.filhoDir.getHeight()
+	return raiz.filhoEsq.GetHeight() - raiz.filhoDir.GetHeight()
 }
 
-func rightRotate(raiz *Node) *Node {
+func RightRotate(raiz *Node) *Node {
 	x := raiz.filhoEsq
 	y := x.filhoDir
 
@@ -133,13 +135,13 @@ func rightRotate(raiz *Node) *Node {
 	raiz.filhoEsq = y
 
 	// Atualizacao de alturas
-	raiz.altura = int64(math.Max(float64(raiz.filhoEsq.getHeight()), float64(raiz.filhoDir.getHeight()))) + 1
-	x.altura = int64(math.Max(float64(x.filhoEsq.getHeight()), float64(x.filhoDir.getHeight()))) + 1
+	raiz.altura = int64(math.Max(float64(raiz.filhoEsq.GetHeight()), float64(raiz.filhoDir.GetHeight()))) + 1
+	x.altura = int64(math.Max(float64(x.filhoEsq.GetHeight()), float64(x.filhoDir.GetHeight()))) + 1
 
 	return x
 }
 
-func leftRotate(raiz *Node) *Node {
+func LeftRotate(raiz *Node) *Node {
 	x := raiz.filhoDir
 	y := x.filhoEsq
 
@@ -147,19 +149,19 @@ func leftRotate(raiz *Node) *Node {
 	raiz.filhoDir = y
 
 	// Atualizacao de alturas
-	raiz.altura = int64(math.Max(float64(raiz.filhoEsq.getHeight()), float64(raiz.filhoDir.getHeight()))) + 1
-	x.altura = int64(math.Max(float64(x.filhoEsq.getHeight()), float64(x.filhoDir.getHeight()))) + 1
+	raiz.altura = int64(math.Max(float64(raiz.filhoEsq.GetHeight()), float64(raiz.filhoDir.GetHeight()))) + 1
+	x.altura = int64(math.Max(float64(x.filhoEsq.GetHeight()), float64(x.filhoDir.GetHeight()))) + 1
 
 	return x
 }
 
-func (raiz *Node) inorder() []float64 {
+func (raiz *Node) Inorder() []float64 {
 	if raiz == nil {
 		return nil
 	}
 
-	esq := raiz.filhoEsq.inorder()
-	dir := raiz.filhoDir.inorder()
+	esq := raiz.filhoEsq.Inorder()
+	dir := raiz.filhoDir.Inorder()
 
 	out := make([]float64, 0)
 
@@ -170,15 +172,15 @@ func (raiz *Node) inorder() []float64 {
 	return out
 }
 
-func (raiz *Node) preorder() []float64 {
+func (raiz *Node) Preorder() []float64 {
 	if raiz == nil {
 		return nil
 	}
 	out := make([]float64, 0)
 	out = append(out, raiz.chave)
 
-	esq := raiz.filhoEsq.preorder()
-	dir := raiz.filhoDir.preorder()
+	esq := raiz.filhoEsq.Preorder()
+	dir := raiz.filhoDir.Preorder()
 
 	out = append(out, esq...)
 	out = append(out, dir...)
@@ -186,13 +188,13 @@ func (raiz *Node) preorder() []float64 {
 	return out
 }
 
-func (raiz *Node) postorder() []float64 {
+func (raiz *Node) Postorder() []float64 {
 	if raiz == nil {
 		return nil
 	}
 
-	dir := raiz.filhoDir.postorder()
-	esq := raiz.filhoEsq.postorder()
+	dir := raiz.filhoDir.Postorder()
+	esq := raiz.filhoEsq.Postorder()
 	out := make([]float64, 0)
 
 	out = append(out, dir...)
