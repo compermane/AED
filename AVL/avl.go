@@ -1,21 +1,21 @@
 package AVL
+
 import (
-	"fmt"
 	"math"
 )
 
 type Node struct {
 	filhoEsq *Node
 	filhoDir *Node
-	chave float64
-	altura int64
+	chave    float64
+	altura   int64
 }
 
 func createNode(v float64) *Node {
 	return &Node{nil, nil, v, 0}
 }
 
-func insertValue(v float64, raiz *Node) (*Node) {
+func insertValue(v float64, raiz *Node) *Node {
 	if raiz == nil {
 		return createNode(v)
 	}
@@ -50,7 +50,7 @@ func insertValue(v float64, raiz *Node) (*Node) {
 	return raiz
 }
 
-func deleteValue(v float64, raiz *Node) (*Node) {
+func deleteValue(v float64, raiz *Node) *Node {
 	if raiz == nil {
 		return raiz
 	}
@@ -200,32 +200,4 @@ func (raiz *Node) postorder() []float64 {
 	out = append(out, raiz.chave)
 
 	return out
-}
-
-func main() {
-	// root := createNode(2)
-	// root = insertValue(1, root)
-	// root = insertValue(7, root)
-	// root = insertValue(4, root)
-	// root = insertValue(5, root)
-	// root = insertValue(3, root)
-	// root = insertValue(8, root)
-
-	root := createNode(1)
-	root = insertValue(2, root)
-	root = insertValue(3, root)
-	root = insertValue(4, root)
-	root = insertValue(5, root)
-
-	out := root.inorder()
-	out2 := root.preorder()
-	out3 := root.postorder()
-
-	fmt.Println(out)
-	fmt.Println(out2)
-	fmt.Println(out3)
-
-	root = deleteValue(3, root)
-	out2 = root.preorder()
-	fmt.Println(out2)
 }
