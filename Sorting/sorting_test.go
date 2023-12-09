@@ -54,3 +54,14 @@ func TestInsertionSort(t *testing.T) {
 		}
 	}
 }
+
+func TestHeapSort(t *testing.T) {
+	for _, testCase := range addTest {
+		got := testCase.arg
+		want := testCase.expected
+		HeapSort(got)
+		if !cmp.Equal(got, want) {
+			t.Errorf("Got %v, want %v", got, want)
+		}
+	}
+}

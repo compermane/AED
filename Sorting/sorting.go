@@ -1,5 +1,37 @@
 package sorting
 
+func HeapSort(l []float64) {
+	n := len(l)
+
+	for i := (n / 2) - 1; i >= 0; i-- {
+		Heapify(l, n, i)
+	}
+
+	for i := n - 1; i > 0; i-- {
+		l[0], l[i] = l[i], l[0]
+		Heapify(l, i, 0)
+	}
+}
+
+func Heapify(l []float64, n int, i int) {
+	largest := i
+	left := (2 * i) + 1
+	right := (2 * i) + 2
+
+	if left < n && l[largest] < l[left] {
+		largest = left
+	}
+
+	if right < n && l[largest] < l[right] {
+		largest = right
+	}
+
+	if largest != i {
+		l[i], l[largest] = l[largest], l[i]
+		Heapify(l, n, largest)
+	}
+}
+
 func InsertionSort(l []float64) []float64 {
 	n := len(l)
 
