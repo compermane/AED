@@ -65,3 +65,16 @@ func TestHeapSort(t *testing.T) {
 		}
 	}
 }
+
+func TestQuickSort(t *testing.T) {
+	for _, testCase := range addTest {
+		got := testCase.arg
+		want := testCase.expected
+
+		n := len(got)
+		QuickSort(got, 0, n - 1)
+		if !cmp.Equal(got, want) {
+			t.Errorf("Got %v, want %v", got, want)
+		}
+	}
+}

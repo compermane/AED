@@ -1,5 +1,29 @@
 package sorting
 
+
+func QuickSort(l []float64, low int, high int) {
+	if low <= high {
+		p := Partition(l, low, high)
+		QuickSort(l, low, p - 1)
+		QuickSort(l, p + 1, high)
+	}
+}
+
+func Partition(l []float64, low int, high int) int {
+	pivot := l[high]
+	i := low - 1
+
+	for j := low; j <= high; j++ {
+		if l[j] < pivot {
+			i++
+			l[i], l[j] = l[j], l[i]
+		}
+	}
+
+	l[i + 1], l[high] = l[high], l[i + 1]
+	return i + 1
+}
+
 func HeapSort(l []float64) {
 	n := len(l)
 
