@@ -1,5 +1,6 @@
 # Algoritmos e Estruturas de Dados em Golang
-![Badge](https://img.shields.io/badge/go-1.19.8%2B-blue)
+![Badge](https://img.shields.io/badge/go-1.19.8%2B-blue) ![Static Badge](https://img.shields.io/badge/tests-passing-green) \
+
 Projeto para a codificação dos principais algoritmos e das principais estruturas de dados na linguagem de programação Go. O projeto também conta com a prática de automação de testes.
 
 ## Uso
