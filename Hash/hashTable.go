@@ -76,7 +76,16 @@ func hashFunction(key PreHashable, limit int64) (hash uint64) {
 }
 
 // Cria uma nova hash table de acordo com um número size de buckets
-func CreateHashTable(size int) *HashTable {
+func CreateHashTable() *HashTable {
+	return CreateHashTableVar(STD_LIMIT)
+}
+
+func CreateHashTableVar(size int) *HashTable {
+	if size <= 0 {
+		return &HashTable{
+			buckets: make([][]Item, STD_LIMIT),
+		}
+	}
 	return &HashTable{
 		buckets: make([][]Item, size),
 	}
@@ -137,6 +146,12 @@ func (table *HashTable) Get(key PreHashable) (interface{}, bool) {
 
 func (table *HashTable) Delete(key PreHashable) error {
 	hash := hashFunction(key, int64(len(table.buckets)))
+
+	_, ok := table.Get(key) 
+	// Caso em que a chave não existe
+	if !ok {
+		return nil
+	}
 
 	for i, e := range table.buckets[hash] {
 		if e.key == key {
