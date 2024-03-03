@@ -41,36 +41,16 @@ func CreateDiGraph(nodes map[string]*Node) *DiGraph {
 func (dg *DiGraph) PrintDiGraph() {
 	for _, node := range dg.Nodes {
 		fmt.Printf("%v: {", node.NodeID)
+
+		lastNode := len(node.Distances) - 1
+		i := 0
 		for dest, dist := range node.Distances {
-			fmt.Printf("%v: %v, ", dest, dist)
+			fmt.Printf("%v: %v", dest, dist)
+			if i < lastNode {
+				fmt.Printf(", ")
+			}
 		}
 		fmt.Printf("}\n")
 	}
 }
 
-func main() {
-    // Create a DiGraph instance
-    graph := DiGraph{
-        Nodes: make(map[string]*Node),
-    }
-
-    // Add some nodes to the graph
-    nodeA := &Node{
-        NodeID: "A",
-        Distances: map[string]int{
-            "B": 10,
-            "C": 20,
-        },
-    }
-    graph.Nodes["A"] = nodeA
-
-    nodeB := &Node{
-        NodeID: "B",
-        Distances: map[string]int{
-            "A": 5,
-        },
-    }
-    graph.Nodes["B"] = nodeB
-
-	graph.PrintDiGraph()
-}
