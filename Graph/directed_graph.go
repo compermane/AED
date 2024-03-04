@@ -88,6 +88,16 @@ func (dg *DiGraph) PrintDiGraph() {
 	}
 }
 
+func (dg *DiGraph) GetWeightFromEdge(nodeA, nodeB *Node) (float64, bool) {
+	for _, edge := range dg.Edges {
+		if edge.origin == nodeA && edge.destiny == nodeB {
+			return edge.weight, true
+		}
+	}
+
+	return 0, false
+}
+
 func (dg *DiGraph) Neighbors(origin *Node) []*Node {
 	neighbors := make([]*Node, 0)
 
@@ -98,4 +108,16 @@ func (dg *DiGraph) Neighbors(origin *Node) []*Node {
 	}
 
 	return neighbors
+}
+
+func popNode(delNode *Node, arr []*Node) []*Node {
+	newArr := make([]*Node, 0)
+
+	for _, node := range arr {
+		if node.ID != delNode.ID {
+			newArr = append(newArr, node)
+		}
+	}
+
+	return newArr
 }
