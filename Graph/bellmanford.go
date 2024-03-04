@@ -29,7 +29,7 @@ func (dg *DiGraph) BellmanFord(origin *Node, destiny *Node) (float64, bool) {
 	for _, edge := range dg.Edges {
 		source := edge.origin
 		target := edge.destiny
-		peso := edge.weight
+		peso, _ := dg.GetWeightFromEdge(source, target)
 		
 		// Contém ciclo com peso negativo
 		if distances[source] + peso < distances[target] {
