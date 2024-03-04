@@ -12,12 +12,11 @@ func (dg *DiGraph) BellmanFord(origin *Node, destiny *Node) (float64, bool) {
 
 	distances[origin] = 0
 
-	i := 0
-	for ; i < len(dg.Nodes) - 1; i++ {
+	for i := 0; i < len(dg.Nodes) - 1; i++ {
 		for _, edge := range dg.Edges {
 			source := edge.origin
 			target := edge.destiny
-			peso := edge.weight
+			peso, _ := dg.GetWeightFromEdge(source, target)
 			pesoPotencial := peso + distances[source]
 
 			if pesoPotencial < distances[target] {
