@@ -16,6 +16,8 @@ import "fmt"
 	distâncias para vários outros nós.
 */
 
+const INF float64 = float64(^uint(0) >> 1)
+
 type DiGraph struct {
 	Nodes 	[]*Node
 	Edges 	[]*Edge

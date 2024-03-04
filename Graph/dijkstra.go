@@ -1,23 +1,15 @@
 package Graph
 
 func (dg *DiGraph) Dijkstra(origin, destiny *Node) float64 {
-	const INF float64 = float64(^uint(0) >> 1)
-
 	distances := make(map[*Node]float64)
-	for _, node := range dg.Nodes {
-		distances[node] = INF
-	}
-	distances[origin] = 0
-
 	predecessors := make(map[*Node]*Node) 
-	for _, node := range dg.Nodes {
-		predecessors[node] = nil
-	}
-
 	notVisited := make([]*Node, 0)
 	for _, node := range dg.Nodes {
+		distances[node] = INF
+		predecessors[node] = nil
 		notVisited = append(notVisited, node)
 	}
+	distances[origin] = 0
 
 	for len(notVisited) != 0 {
 		minDistance := INF
