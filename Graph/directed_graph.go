@@ -66,6 +66,33 @@ func (dg *DiGraph) AddEdge(nodeA, nodeB *Node, weight float64) {
 	dg.Edges = append(dg.Edges, newEdge)
 }
 
+func CreateGraphByMap(nodesMap map[string]map[string]float64) *DiGraph {
+	dg := CreateGraph()
+
+	for id := range nodesMap {
+		dg.AddNode(CreateNode(id))
+	}
+
+	for origin, neighbors := range nodesMap {
+		org := dg.GetNodeFromID(origin)
+		for neighborID, distance := range neighbors {
+			dty := dg.GetNodeFromID(neighborID)
+			dg.AddEdge(org, dty, distance)
+		}
+	}
+	return dg
+}
+
+func (dg *DiGraph) GetNodeFromID(nodeID string) *Node {
+	for _, node := range dg.Nodes {
+		if node.ID == nodeID {
+			return node
+		}
+	}
+
+	return nil
+}
+
 func (dg *DiGraph) PrintDiGraph() {
 	for _, node := range dg.Nodes {
 		fmt.Printf("%v: {", node.ID)
