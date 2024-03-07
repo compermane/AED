@@ -1,14 +1,19 @@
 package Graph
 
-import "testing"
+import (
+	"testing"
+)
 
 type GraphMap map[string]map[string]float64
 var NodeIDs []string
-var GraphMaps []GraphMap
+var BFSExpected [][]string
+var GraphMaps, BFSMaps []GraphMap
 
 func init() {
 	NodeIDs = []string{"A", "B", "C", "D", "E", "F"}
 	GraphMaps = make([]GraphMap, 0)
+	BFSMaps = make([]GraphMap, 0)
+	BFSExpected = make([][]string, 0)
 
 	Graph1 := make(GraphMap)
 	Graph1["A"] = map[string]float64{"B": 10, "D": 5}
@@ -25,7 +30,26 @@ func init() {
 	Graph2["D"] = map[string]float64{"B": 1, "C": 5}
 	Graph2["E"] = map[string]float64{"D": -3}
 
+	// TODO: ADICIONAR TESTES PARA TRANSVERSAL QUE FUNCIONEM!!
+	Graph3 := make(GraphMap)
+	Graph3["0"] = map[string]float64{"1": 1, "2": 1, "3": 1}
+	Graph3["1"] = map[string]float64{"0": 1, "2": 1}
+	Graph3["2"] = map[string]float64{"0": 1, "4": 1}
+	Graph3["3"] = map[string]float64{"0": 1}
+	Graph3["4"] = map[string]float64{"2": 1}
+
+	Graph4 := make(GraphMap)
+	Graph4["0"] = map[string]float64{"1": 1, "3": 1}
+	Graph4["1"] = map[string]float64{"0": 1, "2": 1, "3": 1, "5": 1, "6": 1}
+	Graph4["2"] = map[string]float64{"1": 1, "3": 1, "4": 1, "5": 1}
+	Graph4["3"] = map[string]float64{"0": 1, "1": 1, "2": 1, "4": 1}
+	Graph4["4"] = map[string]float64{"2": 1, "3": 1, "6": 1}
+	Graph4["5"] = map[string]float64{"1": 1, "2": 1}
+	Graph4["6"] = map[string]float64{"1": 1, "4": 1}
+
 	GraphMaps = append(GraphMaps, Graph1, Graph2)
+	BFSMaps = append(BFSMaps, Graph3, Graph4)
+	BFSExpected = append(BFSExpected, []string{"0", "1", "2", "3", "4"}, []string{"0", "1", "2", "3", "4", "5", "6"})
 }
 
 func assertNodeID(t *testing.T, id string, node *Node) {
@@ -48,6 +72,18 @@ func assertSameEdgeWeight(t *testing.T, dg *DiGraph, nodeA, nodeB *Node, weight 
 	}
 	if !ok {
 		t.Errorf("Edge error: edge does not exist in graph from nodes %v and %v", nodeA.ID, nodeB.ID)
+	}
+}
+
+func assertTransversal(t *testing.T, got, expected []string) {
+	if len(got) != len(expected) {
+		t.Errorf("Search fail: got transversal of lenght %v expected %v\n", len(got), len(expected))
+	}
+
+	for i := range got {
+		if got[i] != expected[i]  {
+			t.Errorf("Value error: in position %v got %v expected %v\n", i, got[i], expected[i])
+		}
 	}
 }
 func TestCreateNode(t *testing.T) {
@@ -73,4 +109,15 @@ func TestCreateGraphFromMap(t *testing.T) {
 			}
 		}
 	}
+}
+
+func TestBFS(t *testing.T) {
+	for i, graph := range BFSMaps {
+		dg := CreateGraphByMap(graph)
+		visited := dg.BFS("0")
+		expected := BFSExpected[i]
+
+		assertTransversal(t, visited, expected)
+	}
+
 }

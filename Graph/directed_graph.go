@@ -150,3 +150,19 @@ func popNode(delNode *Node, arr []*Node) []*Node {
 
 	return newArr
 }
+
+/*
+Função para verificar a existência de um node em um slice de nodes. Útil para BFS
+:param node: node a ser verificado
+:param nodes: slice de nodes
+:returns: bool; true se existe e false caso contrário 
+*/
+func checkForNodes(node *Node, nodes []*Node) bool {
+	for _, currentNode := range nodes {
+		if currentNode == node {
+			return true
+		}
+	}
+
+	return false
+}
