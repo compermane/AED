@@ -128,6 +128,10 @@ func (dg *DiGraph) GetWeightFromEdge(nodeA, nodeB *Node) (float64, bool) {
 }
 
 func (dg *DiGraph) Neighbors(origin *Node) []*Node {
+	if origin == nil {
+		return nil
+	}
+
 	neighbors := make([]*Node, 0)
 
 	for _, edge := range dg.Edges {

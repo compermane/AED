@@ -6,7 +6,7 @@ import (
 
 type GraphMap map[string]map[string]float64
 var NodeIDs []string
-var BFSExpected [][]string
+var BFSExpected, DFSExpected [][]string
 var GraphMaps, BFSMaps []GraphMap
 
 func init() {
@@ -14,6 +14,7 @@ func init() {
 	GraphMaps = make([]GraphMap, 0)
 	BFSMaps = make([]GraphMap, 0)
 	BFSExpected = make([][]string, 0)
+	DFSExpected = make([][]string, 0)
 
 	Graph1 := make(GraphMap)
 	Graph1["A"] = map[string]float64{"B": 10, "D": 5}
@@ -48,8 +49,9 @@ func init() {
 	Graph4["6"] = map[string]float64{"1": 1, "4": 1}
 
 	GraphMaps = append(GraphMaps, Graph1, Graph2)
-	BFSMaps = append(BFSMaps, Graph3, Graph4)
+	BFSMaps = append(BFSMaps, Graph3)
 	BFSExpected = append(BFSExpected, []string{"0", "1", "2", "3", "4"}, []string{"0", "1", "2", "3", "4", "5", "6"})
+	DFSExpected = append(DFSExpected, []string{"0", "1", "2", "4", "3"})
 }
 
 func assertNodeID(t *testing.T, id string, node *Node) {
@@ -75,14 +77,23 @@ func assertSameEdgeWeight(t *testing.T, dg *DiGraph, nodeA, nodeB *Node, weight 
 	}
 }
 
-func assertTransversal(t *testing.T, got, expected []string) {
+func assertTransversal(t *testing.T, got, expected []string, typeT string) {
+	var mode string
+	if typeT == "dfs" {
+		mode = "DFS"
+	} else if typeT == "bfs" {
+		mode = "BFS"
+	} else {
+		mode = "UNKNOWN"
+	}
+
 	if len(got) != len(expected) {
-		t.Errorf("Search fail: got transversal of lenght %v expected %v\n", len(got), len(expected))
+		t.Errorf(" (%v) Search fail: got transversal of lenght %v expected %v\n", mode, len(got), len(expected))
 	}
 
 	for i := range got {
 		if got[i] != expected[i]  {
-			t.Errorf("Value error: in position %v got %v expected %v\n", i, got[i], expected[i])
+			t.Errorf(" (%v) Value error: in position %v got %v expected %v\n", mode, i, got[i], expected[i])
 		}
 	}
 }
@@ -117,7 +128,18 @@ func TestBFS(t *testing.T) {
 		visited := dg.BFS("0")
 		expected := BFSExpected[i]
 
-		assertTransversal(t, visited, expected)
+		assertTransversal(t, visited, expected, "bfs")
 	}
 
+}
+
+func TestDFS(t *testing.T) {
+	for i, graph := range BFSMaps {
+		dg := CreateGraphByMap(graph)
+		visited := dg.DFS("0")
+		expected := DFSExpected[i]
+
+		assertTransversal(t, visited, expected, "dfs")
+	}
+	
 }
